@@ -1,0 +1,7 @@
+Package: analyzy-logs
+Version: 1.0
+Architecture: all
+Maintainer: valeria <lerakenobi@example.com>
+Description: Скрипт для анализа логов.
+ Этот скрипт анализирует файлы логов.
+Depends: bash
