@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package com.example.user;
+
+option java_multiple_files = true;
+option java_package = "com.example.userservice.proto";
+option java_outer_classname = "UserServiceProto";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc GetUser(GetUserRequest) returns (UserResponse);
+}
+
+// Запрос на создание пользователя
+message CreateUserRequest {
+  string name = 1;
+  string email = 2;
+}
+
+// Ответ с данными пользователя
+message UserResponse {
+  string user_id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+// Запрос на получение данных пользователя
+message GetUserRequest {
+  string user_id = 1;
+}
