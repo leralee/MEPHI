@@ -1,0 +1,8 @@
+---
+    - name: Развернуть веб-сервера
+      hosts: all
+      become: true
+    
+      roles:
+        - nginx
+        - apache
