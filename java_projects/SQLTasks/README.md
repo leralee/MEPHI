@@ -36,17 +36,53 @@
 
 
 ## Описание БД
-### 1. Виды транспорта
-- **transport_types** (id, производитель, модель, тип)
-- **cars** (id, модель, объём бака, мощность, стоимость, КПП)
-- **motorcycles** (id, модель, объём бака, мощность, стоимость, тип)
-- **bicycles** (серийный_номер, модель, передачи, стоимость, тип)
+#### 1. **База данных «Виды транспорта» (`vehicles`)**
 
-### 2. Автогонки
-- **classification** (класс, тип, страна, двери, бак, вес)
-- **cars** (название, класс, год)
-- **races** (название, дата)
-- **results** (автомобиль, гонка, позиция)
+**Структура:**
+- **`Vehicle`** (основная информация):  
+  `maker` (производитель), `model` (модель), `type` (тип транспорта: Car/Motorcycle/Bicycle).
+- **`Car`** (автомобили):  
+  `vin` (идентификатор), `engine_capacity` (объём двигателя), `horsepower` (мощность), `price` (цена), `transmission` (тип КПП).
+- **`Motorcycle`** (мотоциклы):  
+  Аналогично автомобилям + `type` (Sport/Cruiser/Touring).
+- **`Bicycle`** (велосипеды):  
+  `serial_number`, `gear_count` (количество передач), `type` (Mountain/Road/Hybrid).
 
+**Связи:**
+- `Car.model`, `Motorcycle.model`, `Bicycle.model` → `Vehicle.model`.
+---
+
+#### 2. **База данных «Автогонки» (`races`)**
+
+**Структура:**
+- **`Classes`** (классы автомобилей):  
+  `class` (название), `type` (Racing/Street), `country`, `engineSize`, `weight`.
+- **`Cars`** (автомобили):  
+  `name`, `class` (ссылка на Classes), `year` (год выпуска).
+- **`Races`** (гонки):  
+  `name`, `date`.
+- **`Results`** (результаты гонок):  
+  `car` (ссылка на Cars), `race` (ссылка на Races), `position`.
+---
+
+#### 3. **База данных «Бронирования» (`bookings`)**
+**Структура:**
+- **`Hotel`**: `ID_hotel`, `name`, `location`.
+- **`Room`**: `ID_room`, `ID_hotel`, `room_type` (Single/Double/Suite), `price`, `capacity`.
+- **`Customer`**: `ID_customer`, `name`, `email`, `phone`.
+- **`Booking`**: `ID_booking`, `ID_room`, `ID_customer`, даты заезда/выезда.
+
+---
+
+#### 4. **База данных «Отделения компании» (`departments`)**
+
+**Структура:**
+- **`Departments`**: `DepartmentID`, `DepartmentName`.
+- **`Roles`**: `RoleID`, `RoleName` (Менеджер, Разработчик и т.д.).
+- **`Employees`**: Иерархия сотрудников с ссылкой на менеджера (`ManagerID`), отдел и роль.
+- **`Projects`**: Проекты с датами и привязкой к отделам.
+- **`Tasks`**: Задачи с назначением на сотрудников и проекты.
+
+---
 
 
