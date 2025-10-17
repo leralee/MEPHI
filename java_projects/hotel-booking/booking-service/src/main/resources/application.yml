@@ -1,0 +1,37 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:h2:mem:bookingdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+  h2:
+    console:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: mysupersecurekey1234567890abcdef
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 192.168.1.143
+
+hotel:
+  service:
+    url: http://localhost:8081
