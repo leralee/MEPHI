@@ -36,6 +36,11 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
+                        // внутренние вызовы из booking-service
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/rooms/*/confirm-availability",
+                                "/api/rooms/*/release",
+                                "/api/rooms/allocate").permitAll()
                         // только админ может добавлять отели и комнаты
                         .requestMatchers(HttpMethod.POST, "/api/hotels/**", "/api/rooms/**").hasRole("ADMIN")
                         // просмотр доступен всем авторизованным

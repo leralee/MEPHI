@@ -2,7 +2,9 @@ package com.leralee.hotelservice.controller;
 
 import com.leralee.hotelservice.dto.HotelDto;
 import com.leralee.hotelservice.dto.RoomDto;
+import com.leralee.hotelservice.dto.OccupancyStatsDto;
 import com.leralee.hotelservice.service.HotelService;
+import com.leralee.hotelservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import java.util.List;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final RoomService roomService;
 
     @GetMapping
     public List<HotelDto> getAllHotels() {
@@ -43,7 +46,8 @@ public class HotelController {
         hotelService.delete(id);
     }
 
-
-
-
+    @GetMapping("/{id}/stats")
+    public OccupancyStatsDto hotelStats(@PathVariable Long id) {
+        return roomService.getHotelStats(id);
+    }
 }

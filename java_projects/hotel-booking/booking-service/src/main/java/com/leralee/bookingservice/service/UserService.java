@@ -4,6 +4,7 @@ import com.leralee.bookingservice.entity.User;
 import com.leralee.bookingservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -16,17 +17,24 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
     public User create(User user) {
+        user.setRole("USER");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public User findByUsernameAndPassword(String username, String password) {
-        return userRepository.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+    public User authenticate(String username, String password) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Неправильное имя или пароль"));
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Неправильное имя или пароль");
+        }
+        return user;
     }
 }

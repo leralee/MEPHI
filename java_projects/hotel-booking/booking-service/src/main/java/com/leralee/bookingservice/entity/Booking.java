@@ -26,10 +26,20 @@ public class Booking {
     private User user;
 
     private Long roomId; // id комнаты из hotel-service
+    private Long hotelId;
+
+    @Column(name = "idempotency_key", unique = true, length = 64)
+    private String idempotencyKey;
+
+    private java.time.LocalDate startDate;
+    private java.time.LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     private LocalDateTime createdAt;
     private LocalDateTime confirmedAt;
+
+    @Version
+    private Long version;
 }

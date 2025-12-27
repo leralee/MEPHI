@@ -28,4 +28,8 @@ public class Room {
     private String number;         // номер комнаты
     private boolean available;     // доступен ли (например, не на ремонте)
     private int timesBooked = 0;       // сколько раз бронировали
+    private String lastHoldToken;  // идемпотентность подтверждения доступности
+
+    @Version
+    private Long version;
 }

@@ -6,21 +6,30 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      default-filters:
+        - RemoveRequestHeader=Cookie
+        - AddRequestHeader=X-Internal-Secret, gateway-approved
+        - AddRequestHeader=X-Trace-Id, ${random.uuid}
+        - name: Retry
+          args:
+            retries: 2
+            statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, INTERNAL_SERVER_ERROR
+            methods: GET, POST, PUT
       routes:
         - id: booking-service
           uri: lb://booking-service
           predicates:
             - Path=/user/**,/api/bookings/**
           filters:
-            - AddRequestHeader=X-Internal-Secret, gateway-approved
+            - RemoveRequestHeader=Cookie
+            - PreserveHostHeader
         - id: hotel-service
           uri: lb://hotel-service
           predicates:
             - Path=/api/hotels/**,/api/rooms/**
           filters:
-            - AddRequestHeader=X-Internal-Secret, gateway-approved
-      default-filters:
-        - RemoveRequestHeader=Cookie  # безопасность
+            - RemoveRequestHeader=Cookie
+            - PreserveHostHeader
 
 eureka:
   client:

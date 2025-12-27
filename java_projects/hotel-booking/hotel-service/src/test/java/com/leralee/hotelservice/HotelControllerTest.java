@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +27,7 @@ class HotelControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @WithMockUser(username = "admin", roles = "ADMIN")
     @Test
     void shouldCreateHotel() throws Exception {
         HotelDto dto = new HotelDto();
@@ -34,7 +36,8 @@ class HotelControllerTest {
 
         mockMvc.perform(post("/api/hotels")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header("X-Internal-Secret", "gateway-approved"))
                 .andExpect(status().isCreated());
     }
 }
